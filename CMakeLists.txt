@@ -19,7 +19,7 @@
 
 cmake_minimum_required( VERSION 3.10 )
 
-project( libascxx VERSION 0.1.1 )
+project( libascxx VERSION 0.1.2 )
 
 set( CMAKE_CXX_STANDARD 20 )
 set( CMAKE_CXX_STANDARD_REQUIRED ON )
