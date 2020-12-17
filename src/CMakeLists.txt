@@ -38,9 +38,7 @@ add_executable( ${PROJECT_NAME} ${SOURCES} )
 target_include_directories( ${PROJECT_NAME} PRIVATE
   ${CMAKE_SOURCE_DIR}/src
   ${CMAKE_BINARY_DIR}
-  $<$<BOOL:${USE_LIBTCOD}>:${LIBTCOD_INCLUDE_DIRS}>
   )
 
-target_link_libraries( ${PROJECT_NAME} PRIVATE
-  $<$<BOOL:${USE_LIBTCOD}>:${LIBTCOD_LIBRARIES}>
-  )
+# target_link_libraries( ${PROJECT_NAME} PRIVATE
+#   )
