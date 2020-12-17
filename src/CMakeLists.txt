@@ -18,9 +18,14 @@
 #
 
 set( SOURCES
-  main.cpp
-  template.hpp
-  template.cpp
+    main.cpp
+    memory.cpp
+    non_copyable.cpp
+    pod.cpp
+    template.hpp
+    template.cpp
+    trace.cpp
+    tuple.cpp
   )
 
 
