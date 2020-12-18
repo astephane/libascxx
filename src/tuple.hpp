@@ -18,14 +18,14 @@
 #define CXX_TUPLE_HPP
 
 
+#include "memory.hpp"
+
 #include <functional>
 #include <tuple>
 
 
 namespace cxx
 {
-  template< typename T >
-  using raw_ptr = std::add_pointer_t< T >;
 
   namespace tuple
   {
