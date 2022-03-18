@@ -21,21 +21,25 @@
 #include <iostream>
 
 
-#define TRACE_THAT_FUN( p )			\
-  std::cout					\
-  << ( p )					\
-  << " " << __PRETTY_FUNCTION__			\
-  << std::endl
+#define FUN( os ) \
+  os << __PRETTY_FUNCTION__
+
+#define THAT_FUN( os, p ) \
+  os << ( p ) << __PRETTY__FUNCTION__
+
+#define THIS_FUN( os ) \
+  THAT_FUN( os, this )
 
 
-#define TRACE_THIS_FUN() TRACE_THAT_FUN( this )
+#define TRACE_THAT_FUN( p ) \
+  THAT_FUN( std::cout, p ) << std::endl
+
+#define TRACE_THIS_FUN() \
+  TRACE_THAT_FUN( this )
 
 
-#define TRACE_FUN()				\
-  std::cout					\
-  << " " << __PRETTY_FUNCTION__			\
-  << std::endl
-
+#define TRACE_FUN() \
+  FUN( std::cout ) << std::endl
 
 namespace cxx
 {
