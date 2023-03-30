@@ -14,154 +14,51 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with libascxx.	If not, see <https://www.gnu.org/licenses/>.
 //
+#pragma once
+
 #ifndef CXX_POD_HPP
 #define CXX_POD_HPP
 
+#include "enum_traits.hpp"
 
-#include <type_traits>
 #include <stdexcept>
 #include <tuple>
 #include <utility>
 
-
 namespace cxx
 {
-
-
-#define DECLARE_ENUM_CLASS_TRAITS( enum_class, enum_class_traits )	\
-									\
-  template< enum_class E >						\
-  struct enum_class_traits						\
-  {									\
-    using value_type = enum_class;					\
-									\
-    using element_type = void;						\
-									\
-    static constexpr char const * name()				\
-    {									\
-      throw std::domain_error(						\
-	"unexpected '" #enum_class "' enum-class value." );		\
-    }									\
-									\
-    static constexpr std::underlying_type_t< enum_class > index() noexcept \
-    {									\
-      return static_cast< std::underlying_type_t< enum_class > >( E );	\
-    }									\
-  }
-
-
-#define DEFINE_ENUM_CLASS_TRAIT( enum_class_traits,	\
-				 enum_class,		\
-				 enum_value,		\
-				 elt_name,		\
-				 elt_type )		\
-							\
-  template<>						\
-  struct enum_class_traits< enum_value >		\
-  {							\
-    using value_type = enum_class;			\
-							\
-    static_assert( std::is_enum_v< enum_class > );	\
-							\
-    using element_type = elt_type;			\
-							\
-    static constexpr char const * name() noexcept	\
-    {							\
-      return elt_name;					\
-    }							\
-  }
-
-
-#define DECLARE_ENUM_CLASS_UNARY_EVALUATOR( enum_class, evaluator_name ) \
-  									\
-  template< enum_class E,						\
-	    typename UnaryOp >						\
-  constexpr								\
-  auto									\
-  eval( UnaryOp unary_op ) noexcept					\
-  {									\
-    using underlying_type_t = std::underlying_type_t< position >;	\
-									\
-    return								\
-      static_cast< E >(							\
-  	unary_op(							\
-  	  static_cast< underlying_type_t >( P )				\
-  	  )								\
-  	);								\
-  }
-
-
-#define DECLARE_ENUM_CLASS_NEXT( enum_class )	\
-						\
-  template< enum_class E >			\
-  constexpr					\
-  auto						\
-  next() noexcept				\
-  {						\
-    return details::eval< E >(			\
-      []( auto p ) { return p + 1; }		\
-      );					\
-  }
-
-
-#define DECLARE_ENUM_CLASS_PREV( enum_class )	\
-						\
-  template< enum_class E >			\
-  constexpr					\
-  auto						\
-  prev() noexcept				\
-  {						\
-    return details::eval< E >(			\
-      []( auto p ) { return p - 1; }		\
-      );					\
-  }
-
-
-  template< typename Enum >
-  constexpr std::size_t index( Enum e ) noexcept
-  {
-    return std::underlying_type_t< Enum >( e );
-  }
-
-
-  template< typename Enum >
-  constexpr std::size_t count() noexcept
-  {
-    return static_cast< std::size_t >( Enum::count );
-  }
-
 
   namespace detail
   {
 
     /** */
     template< typename Enum,
-	      template< Enum > typename Traits,
-	      std::size_t ... I >
+              template< Enum > typename Traits,
+              std::size_t ... I >
     auto make_pod_tuple( std::index_sequence< I ... > )
     {
       return
-	std::tuple<
-	  typename Traits<
-	    static_cast< Enum >( I )
-	    >::element_type ...
-	>();
+        std::tuple<
+          typename Traits<
+            static_cast< Enum >( I )
+            >::element_type ...
+        >();
     }
 
 
     /** */
     template< typename Enum,
-	      template< Enum > typename Traits,
-	      typename ... Args,
-	      std::size_t ... I >
+              template< Enum > typename Traits,
+              typename ... Args,
+              std::size_t ... I >
     auto make_pod_tuple( std::index_sequence< I ... >, Args && ... args )
     {
       return
-	std::tuple<
-	  typename Traits<
-	    static_cast< Enum >( I )
-	    >::element_type ...
-	>( args ... );
+        std::tuple<
+          typename Traits<
+            static_cast< Enum >( I )
+            >::element_type ...
+        >( args ... );
     }
 
   } // namespace detail
@@ -169,8 +66,8 @@ namespace cxx
 
   /** */
   template< typename Enum,
-	    template< Enum > typename Traits,
-	    typename Indices = std::make_index_sequence< cxx::count< Enum >() > >
+            template< Enum > typename Traits,
+            typename Indices = std::make_index_sequence< cxx::count< Enum >() > >
   constexpr
   auto
   make_pod_tuple()
@@ -181,9 +78,9 @@ namespace cxx
 
   /** */
   template< typename Enum,
-	    template< Enum > typename Traits,
-	    typename Indices = std::make_index_sequence< cxx::count< Enum >() >,
-	    typename ... Args >
+            template< Enum > typename Traits,
+            typename Indices = std::make_index_sequence< cxx::count< Enum >() >,
+            typename ... Args >
   constexpr
   auto
   make_pod_tuple( Args && ... args )
@@ -196,15 +93,15 @@ namespace cxx
   {
     /** */
     template< typename Enum,
-	      template< Enum > typename Traits,
-	      std::size_t ... I >
+              template< Enum > typename Traits,
+              std::size_t ... I >
     struct pod
     {
       using this_type = pod< Enum, Traits, I ... >;
 
       constexpr pod( std::index_sequence< I ... > ) noexcept
-      {
-      }
+        {
+        }
 
       using value_type = std::tuple< typename Traits< static_cast< Enum >( I ) >::element_type ... >;
     };
@@ -212,8 +109,8 @@ namespace cxx
 
     /** */
     template< typename Enum,
-	      template< Enum > typename Traits,
-	      std::size_t ... I >
+              template< Enum > typename Traits,
+              std::size_t ... I >
     constexpr
     pod< Enum, Traits, I ... >
     dummy_pod( std::index_sequence< I ... > indices ) noexcept
@@ -226,7 +123,7 @@ namespace cxx
 
   /** */
   template< typename Enum,
-	    template< Enum > typename Traits >
+            template< Enum > typename Traits >
   class pod
   {
     static_assert( std::is_enum_v< Enum > );
@@ -246,16 +143,16 @@ namespace cxx
     template< Enum E >
     auto const &
     get() const noexcept
-    {
-      return std::get< index( E ) >( data );
-    }
+      {
+        return std::get< index( E ) >( data );
+      }
 
     template< Enum E >
     auto &
     get() noexcept
-    {
-      return std::get< index( E ) >( data );
-    }
+      {
+        return std::get< index( E ) >( data );
+      }
 
     value_type data;
   };
@@ -306,13 +203,13 @@ namespace sample_pod
   };
 
 
-#define DEFINE_VECTOR_TRAIT( enum_value, elt_name, elt_type )		\
+#define DEFINE_VECTOR_TRAIT( enum_value, elt_name, elt_type )           \
   DEFINE_ENUM_CLASS_TRAIT( vector_traits, vector, enum_value, elt_name, elt_type )
 
-#define DEFINE_COLOR_TRAIT( enum_value, elt_name, elt_type )		\
+#define DEFINE_COLOR_TRAIT( enum_value, elt_name, elt_type )            \
   DEFINE_ENUM_CLASS_TRAIT( color_traits, color, enum_value, elt_name, elt_type )
 
-#define DEFINE_VERTEX_TRAIT( enum_value, elt_name, elt_type )		\
+#define DEFINE_VERTEX_TRAIT( enum_value, elt_name, elt_type )           \
   DEFINE_ENUM_CLASS_TRAIT( vertex_traits, vertex, enum_value, elt_name, elt_type )
 
 

@@ -17,29 +17,38 @@
 #ifndef CXX_TRACE_HPP
 #define CXX_TRACE_HPP
 
-
 #include <iostream>
 
+/** */
+#ifdef __func__
+# define PFUNC __func__
+#else // __func__
+# define PFUNC __PRETTY_FUNCTION__
+#endif // __func__
 
-#define FUN( os ) \
-  os << __PRETTY_FUNCTION__
+/** */
+#define FUNC                                    \
+  PFUNC
 
-#define THAT_FUN( os, p ) \
-  os << ( p ) << __PRETTY__FUNCTION__
+/** */
+#define THAT_FUNC( p )                          \
+  ( p ) << FUNC
 
-#define THIS_FUN( os ) \
-  THAT_FUN( os, this )
+/** */
+#define THIS_FUNC                               \
+  THAT_FUN( this )
 
+/** */
+#define COUT_THAT_FUNC( p )                     \
+  std::cout << THAT_FUN( p )::endl
 
-#define TRACE_THAT_FUN( p ) \
-  THAT_FUN( std::cout, p ) << std::endl
+/** */
+#define COUT_THIS_FUNC()                        \
+  COUT_THAT_FUN( this )
 
-#define TRACE_THIS_FUN() \
-  TRACE_THAT_FUN( this )
-
-
-#define TRACE_FUN() \
-  FUN( std::cout ) << std::endl
+/** */
+#define COUT_FUNC()                             \
+  std::cout << FUNC << std::endl
 
 namespace cxx
 {

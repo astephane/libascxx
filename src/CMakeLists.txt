@@ -18,6 +18,7 @@
 #
 
 set( SOURCES
+    enum_traits.cpp
     memory.cpp
     non_copyable.cpp
     pod.cpp
