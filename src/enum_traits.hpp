@@ -29,6 +29,25 @@
 namespace cxx
 {
 
+  /** */
+  template< typename Enum >
+  std::enable_if_t< std::is_enum_v< Enum >,
+                    std::underlying_type_t< Enum > >
+  constexpr
+  index( Enum e ) noexcept
+  {
+    return static_cast< std::underlying_type_t< Enum > >( e );
+  }
+
+  /** */
+  template< typename Enum >
+  constexpr
+  std::enable_if_t< std::is_enum_v< Enum >,
+                    std::underlying_type_t< Enum > >
+  count() noexcept
+  {
+    return index< Enum >( Enum::last ) - index< Enum >( Enum::first ) + 1;
+  }
 
 #define DECLARE_ENUM_CLASS_TRAITS( enum_class, enum_class_traits )      \
                                                                         \
@@ -117,20 +136,6 @@ namespace cxx
         []( auto p ) { return p - 1; }          \
         );                                      \
     }
-
-
-    template< typename Enum >
-    constexpr std::size_t index( Enum e ) noexcept
-    {
-      return std::underlying_type_t< Enum >( e );
-    }
-
-
-  template< typename Enum >
-  constexpr std::size_t count() noexcept
-  {
-    return static_cast< std::size_t >( Enum::count );
-  }
 
 } // cxx
 
