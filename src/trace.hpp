@@ -32,23 +32,25 @@
 
 /** */
 #define THAT_FUNC( p )                          \
-  ( p ) << FUNC
+  ( p ) << " " << FUNC
 
 /** */
 #define THIS_FUNC                               \
-  THAT_FUN( this )
+  THAT_FUNC( this )
+
+
+/** */
+#define COUT_FUNC()                             \
+  std::cout << FUNC
 
 /** */
 #define COUT_THAT_FUNC( p )                     \
-  std::cout << THAT_FUN( p )::endl
+  std::cout << THAT_FUN( p )
 
 /** */
 #define COUT_THIS_FUNC()                        \
   COUT_THAT_FUN( this )
 
-/** */
-#define COUT_FUNC()                             \
-  std::cout << FUNC << std::endl
 
 namespace cxx
 {
